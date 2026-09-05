@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumen Marketing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="neuralCanvas" aria-hidden="true"></canvas>
+<div id="app"></div>
+<script type="application/json" id="siteData">
+{
+  "company": {
+    "name": "Lumen Marketing",
+    "tagline": "Visible Everywhere They Look.",
+    "heroSub": "Lumen is a marketing studio built for how people actually find brands now — search engines, AI answers, generative chat, and video feeds. We optimize, produce, and automate for all four, so you're not betting everything on one.",
+    "email": "hello@lumenmarketing.example",
+    "phone": "+1 (555) 019-2884",
+    "address": "Remote-first, project teams worldwide",
+    "responseTime": "Within two business days",
+    "social": { "linkedin": "#", "instagram": "#", "youtube": "#" },
+    "stats": [
+      { "value": 180, "label": "Brands grown" },
+      { "value": 42, "label": "Avg. LLM citations / mo" },
+      { "value": 9, "label": "Years in the field" }
+    ],
+    "quoteHome": "A brand ranking #1 on Google and invisible in ChatGPT isn't winning — it's winning half a war it doesn't know it's fighting.",
+    "quoteAbout": "We didn't want to be 'the SEO agency' or 'the video shop.' Visibility is one problem now — we treat it like one.",
+    "showreelUrl": "https://www.youtube.com/watch?v=KWYu1i-QUvI",
+    "showreelEnabled": true,
+    "adminPin": "1234",
+    "design": {
+      "light": {"bg":"#fafafa","surface":"#f4f4f5","surface2":"#e4e4e7","text":"#09090b","muted":"#71717a","border":"rgba(9,9,11,.06)","borderStrong":"rgba(9,9,11,.15)","good":"#18181b","bad":"#ff3b30","accent":"#10b981","accentBright":"#00ff66","accentText":"#09090b","neural":"#a1a1aa"},
+      "dark": {"bg":"#050505","surface":"#0f0f10","surface2":"#1c1c1e","text":"#f4f4f5","muted":"#a1a1aa","border":"rgba(244,244,245,.08)","borderStrong":"rgba(244,244,245,.18)","good":"#ffffff","bad":"#ff453a","accent":"#ccff00","accentBright":"#e5ff7f","accentText":"#050505","neural":"#71717a"},
+      "neural": {"speed":0.5,"nodeSize":2,"lineWidth":1,"density":32000,"maxDistance":150}
+    }
+  },
+  "services": [
+    { "id": "seo", "category": "SEARCH", "title": "SEO", "tagline": "Still the biggest channel.", "desc": "Technical audits, on-page optimization, content architecture, and link acquisition built to rank — and built to survive the next algorithm update, not just the current one.", "points": ["Technical audits & Core Web Vitals", "Keyword & topic clustering", "Link building & digital PR", "Local & multi-location SEO"], "image": "" },
+    { "id": "aeo", "category": "ANSWERS", "title": "AEO", "tagline": "Win the box, not just the click.", "desc": "Answer Engine Optimization structures your content so Google's AI Overviews, featured snippets, and voice assistants quote your brand directly — the placements that get read even when no one clicks through.", "points": ["Schema & structured data", "Direct-answer content formatting", "FAQ & voice search optimization", "Featured snippet targeting"], "image": "" },
+    { "id": "geo", "category": "GENERATIVE", "title": "GEO", "tagline": "Get recommended by the models people ask.", "desc": "Generative Engine Optimization positions your brand to be cited and recommended inside ChatGPT, Perplexity, Gemini, and Claude — the newest, fastest-growing surface where people discover what to buy.", "points": ["LLM citation tracking", "Entity & knowledge-graph optimization", "Authoritative content for retrieval", "Prompt-level visibility audits"], "image": "" },
+    { "id": "video", "category": "VIDEO", "title": "Video Production & Editing", "tagline": "Built to be watched, not skipped.", "desc": "Short-form for Reels, TikTok, and Shorts, and long-form for YouTube — shot, edited, and paced around retention data, not a hunch about what \"feels right.\"", "points": ["Hook-rate & retention editing", "Motion graphics & captions", "Repurposing long-form into shorts", "Platform-native pacing & aspect ratios"], "image": "" },
+    { "id": "digital-marketing", "category": "PAID", "title": "Digital Marketing & Paid Ads", "tagline": "Budget that finds buyers, not just clicks.", "desc": "Google, Meta, and programmatic campaigns planned around the same visibility data as your organic work — so paid and earned placements reinforce each other instead of competing for the same click.", "points": ["Search & shopping ads (Google, Bing)", "Meta & TikTok paid social", "Programmatic & retargeting", "Budget pacing & bid strategy"], "image": "" },
+    { "id": "smm", "category": "SOCIAL", "title": "Social Media Marketing", "tagline": "Consistent, on-brand, and actually posted.", "desc": "Day-to-day management of your social channels — organic posting, community replies, and paid boosts — run on the same content calendar as your video and editorial output.", "points": ["Channel management & scheduling", "Community management & replies", "Paid social boosts & promotion", "Platform-native creative formats"], "image": "" },
+    { "id": "content-strategy", "category": "CONTENT", "title": "Content & Editorial Strategy", "tagline": "One calendar, every channel.", "desc": "Editorial planning that keeps SEO, AEO, GEO, video, and social pulling in the same direction instead of five uncoordinated content plans.", "points": ["Content calendars & topic maps", "Blog & long-form editorial", "Cross-channel repurposing plans", "Performance reporting by topic"], "image": "" },
+    { "id": "email-marketing", "category": "LIFECYCLE", "title": "Email Marketing & CRM", "tagline": "The channel you already own.", "desc": "Lifecycle email and CRM flows — welcome series, nurture, win-back — built on segmentation and send-time data instead of a single monthly blast.", "points": ["Welcome & nurture sequences", "Segmentation & list hygiene", "Win-back & re-engagement flows", "Deliverability & send-time testing"], "image": "" },
+    { "id": "ai-systems", "category": "AUTOMATION", "title": "AI Marketing Systems", "tagline": "Automation that still sounds like you.", "desc": "Custom AI pipelines for ad creative, lead scoring, personalization, and reporting — wired into the CRM and ad accounts you already use, not a separate platform to babysit.", "points": ["AI ad creative & copy generation", "Lead scoring & CRM automation", "On-site personalization", "Always-on reporting agents"], "image": "" },
+    { "id": "branding", "category": "BRAND", "title": "Branding & Creative Design", "tagline": "A brand system your channels can share.", "desc": "Visual identity, messaging, and creative templates built so every ad, video, and post looks like the same brand — instead of restarting design decisions on every asset.", "points": ["Visual identity & style guides", "Messaging & brand voice", "Ad & social creative templates", "Asset libraries for every channel"], "image": "" },
+    { "id": "web-design", "category": "CONVERSION", "title": "Web Design & CRO", "tagline": "Traffic that actually converts.", "desc": "Landing pages and site experience built around conversion data, so the visibility work upstream doesn't leak out through a slow or confusing site.", "points": ["Landing page design & builds", "Conversion rate optimization", "Site speed & Core Web Vitals", "A/B testing & analytics setup"], "image": "" },
+    { "id": "pr", "category": "EARNED", "title": "PR & Influencer Partnerships", "tagline": "Coverage and mentions models learn from.", "desc": "Earned media and creator partnerships that build the third-party mentions search engines and AI models weigh heavily when deciding who to cite and recommend.", "points": ["Press outreach & media relations", "Influencer & creator partnerships", "Earned link & mention building", "Reputation & review management"], "image": "" }
+  ],
+  "projects": [
+    { "id": "solstice", "client": "Solstice Skincare", "category": "Skincare · SEO + GEO", "title": "Now the answer, not just a result.", "desc": "Solstice ranked on page one for years but never showed up when people asked ChatGPT for skincare advice. We rebuilt their product and ingredient pages around the entities and structured facts generative engines actually retrieve from.", "metricValue": "40+", "metricLabel": "skincare queries where ChatGPT now cites them by name", "image": "", "featured": true },
+    { "id": "ridgeline", "client": "Ridgeline Outdoor", "category": "Outdoor Gear · Video & Social", "title": "Built for the scroll, not the upload button.", "desc": "A weekly short-form program — shot in batches, edited around hook rate and watch-through data, and repurposed into a month of placements per shoot.", "metricValue": "68%", "metricLabel": "average watch-through, up from 24% before the rebuild", "image": "", "featured": true },
+    { "id": "fernwood", "client": "Fernwood Realty", "category": "Real Estate · Local SEO + AEO", "title": "The AI Overview box, not page two.", "desc": "Listing pages restructured with direct-answer formatting and local schema so Google's AI Overview quotes Fernwood directly for neighborhood and pricing questions.", "metricValue": "90%", "metricLabel": "of target local search terms now win the AI answer box", "image": "", "featured": true },
+    { "id": "nomad", "client": "Nomad Analytics", "category": "B2B SaaS · AI Marketing Systems", "title": "A pipeline that never sleeps on a lead.", "desc": "An automated lead-scoring and outreach system tied into their CRM, generating first-touch sequences in their own brand voice within minutes of a signup.", "metricValue": "54%", "metricLabel": "lower cost per qualified lead within one quarter", "image": "", "featured": false }
+  ],
+  "team": [
+    { "id": "avery-chen", "name": "Avery Chen", "role": "Founder & Strategy Lead", "bio": "Connects SEO, AEO, GEO, and video into one plan instead of four separate ones. Placeholder bio — replace with the real thing.", "photo": "", "linkedin": "#" },
+    { "id": "priya-kapoor", "name": "Priya Kapoor", "role": "Head of SEO & AEO", "bio": "Runs technical audits and answer-box strategy for every account. Placeholder bio — replace with the real thing.", "photo": "", "linkedin": "#" },
+    { "id": "marcus-webb", "name": "Marcus Webb", "role": "Lead Video Editor", "bio": "Cuts short and long-form video around real retention data. Placeholder bio — replace with the real thing.", "photo": "", "linkedin": "#" },
+    { "id": "sofia-ramirez", "name": "Sofia Ramirez", "role": "AI Systems Engineer", "bio": "Builds the automation pipelines behind reporting and lead scoring. Placeholder bio — replace with the real thing.", "photo": "", "linkedin": "#" }
+  ],
+  "jobs": [
+    { "id": "seo-strategist", "title": "SEO Strategist", "department": "Search", "location": "Remote", "type": "Full-time", "desc": "Own technical audits and on-page strategy across a portfolio of client accounts.", "applyEmail": "careers@lumenmarketing.example", "status": "open" },
+    { "id": "video-editor", "title": "Video Editor (Short-Form)", "department": "Production", "location": "Remote", "type": "Full-time", "desc": "Cut daily short-form content optimized for hook rate and watch-through.", "applyEmail": "careers@lumenmarketing.example", "status": "open" },
+    { "id": "ai-automation-engineer", "title": "AI Automation Engineer", "department": "Engineering", "location": "Remote", "type": "Contract", "desc": "Build and maintain the AI pipelines behind client reporting and lead scoring.", "applyEmail": "careers@lumenmarketing.example", "status": "closed" }
+  ],
+  "access": [
+    { "id": "owner-1", "name": "Shaheer", "email": "m.shaheernaeem@gmail.com", "role": "Owner", "note": "Full access via the page's Share button" }
+  ]
+}
+</script>
+<script src="script.js"></script>
+
+  <!-- Netlify Forms detection form. The visible contact form is rendered by JavaScript. -->
+
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Contact Form</title>
+</head>
+<body>
+  <!-- Static Netlify Forms blueprint. This page is intentionally unlinked; Netlify scans it during deploy. -->
+  <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="contact">
+    <input type="text" name="name">
+    <input type="email" name="email">
+    <input type="text" name="website">
+    <input type="checkbox" name="services[]" value="GEO">
+    <input type="checkbox" name="services[]" value="Video Production & Editing">
+    <input type="checkbox" name="services[]" value="Social Media Marketing">
+    <input type="checkbox" name="services[]" value="Email Marketing & CRM">
+    <input type="checkbox" name="services[]" value="Web Design & CRO">
+    <textarea name="message"></textarea>
+    <input type="text" name="bot-field">
+    <button type="submit">Send</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "lumen-marketing-site",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "@netlify/blobs": "^11.0.3"
+  }
+}
