@@ -912,7 +912,31 @@
   }
 
   // ============ POST-RENDER EFFECTS ============
+  function wrapTrailingArrows(root){
+    if(!root) return;
+    var ARROW_RE = /(→|↗)$/; // trailing → or ↗
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var targets = [];
+    var node;
+    while((node = walker.nextNode())){
+      if(ARROW_RE.test(node.nodeValue) && node.parentElement && !node.parentElement.classList.contains("arrow-glyph")){
+        targets.push(node);
+      }
+    }
+    targets.forEach(function(node){
+      var text = node.nodeValue;
+      var before = text.slice(0, -1);
+      var span = document.createElement("span");
+      span.className = "arrow-glyph";
+      span.textContent = text.slice(-1);
+      var parent = node.parentNode;
+      parent.insertBefore(document.createTextNode(before), node);
+      parent.replaceChild(span, node);
+    });
+  }
+
   function afterRenderEffects(){
+    wrapTrailingArrows(document.getElementById("app"));
     var revealEls = document.querySelectorAll(".reveal");
     if("IntersectionObserver" in window && !reduceMotion){
       var io = new IntersectionObserver(function(entries){
@@ -971,6 +995,19 @@
           entries.forEach(function(en){ if(en.isIntersecting){ setActiveStep(Array.prototype.indexOf.call(steps, en.target)); } });
         }, {threshold:0.5, rootMargin:"-20% 0px -20% 0px"});
         steps.forEach(function(s){ stepIO.observe(s); });
+      }
+    }
+
+    var svcSliderEl = document.getElementById("svcSlider");
+    if(svcSliderEl){
+      var svcCards = svcSliderEl.querySelectorAll(".svc-slide-card");
+      if(!("IntersectionObserver" in window)){
+        svcCards.forEach(function(c){ c.classList.add("in-focus"); });
+      } else {
+        var svcIO = new IntersectionObserver(function(entries){
+          entries.forEach(function(en){ en.target.classList.toggle("in-focus", en.intersectionRatio > 0.6); });
+        }, {root: svcSliderEl, threshold: [0, 0.3, 0.6, 0.9, 1]});
+        svcCards.forEach(function(c){ svcIO.observe(c); });
       }
     }
   }
@@ -1361,6 +1398,24 @@
     });
   }
 
+  // ============ CUSTOM CURSOR DOT (augments, never hides, the real cursor) ============
+  function initCustomCursor(){
+    if(reduceMotion || !window.matchMedia || !window.matchMedia("(hover:hover) and (pointer:fine)").matches) return;
+    var dot = document.createElement("div");
+    dot.className = "cursor-dot";
+    dot.setAttribute("aria-hidden", "true");
+    document.body.appendChild(dot);
+    var shown = false;
+    document.addEventListener("mousemove", function(e){
+      dot.style.left = e.clientX + "px";
+      dot.style.top = e.clientY + "px";
+      if(!shown){ dot.classList.add("visible"); shown = true; }
+      var el = e.target && e.target.closest ? e.target.closest("a, button, .btn, input, textarea, select, [role='button']") : null;
+      dot.classList.toggle("hover-target", !!el);
+    }, {passive:true});
+    document.addEventListener("mouseleave", function(){ dot.classList.remove("visible"); });
+  }
+
   // ============ NEURAL NETWORK BACKGROUND (canvas, lives outside #app) ============
   function initNeuralBackground(){
     var canvas = document.getElementById("neuralCanvas");
@@ -1610,6 +1665,7 @@
 
   initSpotlight();
   initLenis();
+  initCustomCursor();
   initNeuralBackground();
   // Load server-persisted dashboard data before the first render.
   loadSiteData().then(function(){

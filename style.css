@@ -149,6 +149,12 @@
   .spotlight:hover::after,.btn-primary:hover::after{opacity:1;}
   .btn-primary::after{background:radial-gradient(140px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.45), transparent 72%);mix-blend-mode:overlay;}
 
+  /* ---------- Custom cursor dot (desktop, fine pointer only) ---------- */
+  .cursor-dot{position:fixed;top:0;left:0;width:32px;height:32px;border-radius:50%;pointer-events:none;z-index:400;opacity:0;background:var(--accent);transform:translate(-50%,-50%) scale(.28);transition:transform .18s cubic-bezier(.2,.8,.2,1), opacity .2s ease, background .2s ease, border-color .2s ease;}
+  .cursor-dot.visible{opacity:.85;}
+  .cursor-dot.hover-target{transform:translate(-50%,-50%) scale(1);background:transparent;border:1.5px solid var(--accent);}
+  @media (hover:none), (pointer:coarse), (prefers-reduced-motion: reduce){ .cursor-dot{display:none;} }
+
   /* ---------- Nav ---------- */
   header{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 82%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .25s ease, box-shadow .25s ease;}
   header.scrolled{border-bottom-color:var(--border);box-shadow:0 8px 24px var(--shadow);}
@@ -183,6 +189,9 @@
 
   .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;border:1px solid transparent;transition:transform .18s ease, background .18s ease, opacity .18s ease;white-space:nowrap;}
   .btn:hover{transform:translateY(-1px);}
+  .arrow-glyph{display:inline-block;transition:transform .25s cubic-bezier(.2,.8,.2,1);}
+  a:hover .arrow-glyph, button:hover .arrow-glyph{transform:translateX(4px);}
+  @media (prefers-reduced-motion: reduce){ .arrow-glyph{transition:none;} }
   .btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
   .btn-primary{background:var(--accent);color:var(--accent-text);box-shadow:0 10px 26px -10px var(--accent-glow);}
   .btn-primary:hover{background:var(--accent-bright);}
@@ -335,8 +344,10 @@
   .slider-btn svg{width:16px;height:16px;}
   .svc-slider{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 4px 14px;margin:0 -4px;}
   .svc-slider::-webkit-scrollbar{display:none;}
-  .svc-slide-card{flex:0 0 clamp(220px,32vw,290px);scroll-snap-align:start;border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:28px 24px;text-decoration:none;display:block;position:relative;overflow:hidden;transition:border-color .2s ease, transform .2s ease;}
+  .svc-slide-card{flex:0 0 clamp(220px,32vw,290px);scroll-snap-align:start;border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:28px 24px;text-decoration:none;display:block;position:relative;overflow:hidden;transition:border-color .2s ease, transform .2s ease, opacity .4s ease, filter .4s ease;opacity:.5;filter:grayscale(.35);}
+  .svc-slide-card.in-focus{opacity:1;filter:none;}
   .svc-slide-card:hover{border-color:var(--border-strong);transform:translateY(-3px);}
+  @media (prefers-reduced-motion: reduce){ .svc-slide-card{opacity:1;filter:none;} }
   .svc-slide-card .cap-icon{margin-bottom:18px;}
   .svc-slide-card h3{font-size:17px;font-weight:800;margin-bottom:8px;font-family:var(--body);}
   .svc-slide-card p{color:var(--text-muted);font-size:14px;}
