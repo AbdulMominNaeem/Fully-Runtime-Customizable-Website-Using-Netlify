@@ -493,6 +493,8 @@
   /* ---------- Footer ---------- */
   footer.site-footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:64px 0 32px;background:var(--bg);}
   .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:56px;}
+  .footer-brand .logo{font-size:27px;gap:12px;padding-bottom:8px;}
+  .footer-brand .logo-mark,.footer-brand .brand-logo-img{width:38px;height:38px;}
   .footer-brand p{color:var(--text-muted);font-size:14px;margin-top:14px;max-width:32ch;}
   .footer-col h4{font-size:12px;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:16px;font-weight:700;}
   .footer-col ul{display:flex;flex-direction:column;gap:11px;}
