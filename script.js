@@ -2,6 +2,7 @@
 (function(){
   "use strict";
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var lenisInstance = null;
   var GOOGLE_FONTS_LINK = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">';
 
   // ============ DATA ============
@@ -329,10 +330,10 @@
         ) : '') +
         '<div class="wrap hero-grid' + (videoActive ? ' hero-grid-solo' : '') + '">' +
           '<div class="hero-slider" id="heroSlider">' +
-            '<span class="eyebrow" id="heroEyebrow">'+slides[0].eyebrow+'</span>' +
-            '<h1 id="heroH1">'+slides[0].h1+'</h1>' +
-            '<p class="lede" id="heroLede">' + esc(slides[0].lede) + '</p>' +
-            '<div class="hero-actions">' +
+            '<span class="eyebrow reveal" id="heroEyebrow">'+slides[0].eyebrow+'</span>' +
+            '<h1 class="reveal" style="transition-delay:.08s" id="heroH1">'+slides[0].h1+'</h1>' +
+            '<p class="lede reveal" style="transition-delay:.16s" id="heroLede">' + esc(slides[0].lede) + '</p>' +
+            '<div class="hero-actions reveal" style="transition-delay:.24s">' +
               '<a href="#/contact" class="btn btn-primary">Get a visibility audit &rarr;</a>' +
               '<a href="#/services" class="btn btn-ghost">See our services</a>' +
             '</div>' +
@@ -348,7 +349,7 @@
             '</div>' +
           '</div>' +
           (videoActive ? '' :
-          '<div class="panel" role="img" aria-label="Dashboard showing a client visibility report">' +
+          '<div class="panel reveal spotlight" style="transition-delay:.2s" role="img" aria-label="Dashboard showing a client visibility report">' +
             '<div class="panel-bar"><span class="panel-dot"></span><span class="panel-dot"></span><span class="panel-dot"></span><span class="panel-title">visibility.report</span></div>' +
             '<div class="panel-body" id="panelBody">' +
               '<div class="panel-row hd"><span>BRAND: '+esc((DATA.projects[0]&&DATA.projects[0].client)||"Your Brand")+'</span><span>Q3 2026</span></div>' +
@@ -905,7 +906,8 @@
     document.title = DATA.company.name + (route === "home" ? "" : " — " + route.charAt(0).toUpperCase() + route.slice(1));
   }
   function scrollForRoute(){
-    window.scrollTo(0,0);
+    if(lenisInstance) lenisInstance.scrollTo(0, {immediate:true});
+    else window.scrollTo(0,0);
   }
 
   // ============ POST-RENDER EFFECTS ============
@@ -950,9 +952,11 @@
     var panelTitle = document.getElementById("panelTitle");
     var panelDesc = document.getElementById("panelDesc");
     var trackItems = document.querySelectorAll("#stepTrack i");
+    var chips = document.querySelectorAll(".chip-field .chip");
     function setActiveStep(idx){
       steps.forEach(function(s,i){ s.classList.toggle("active", i===idx); });
       trackItems.forEach(function(t,i){ t.classList.toggle("done", i<=idx); });
+      if(chips.length) chips.forEach(function(c,i){ c.classList.toggle("active", i === (idx % chips.length)); });
       var el = steps[idx];
       if(!el) return;
       if(panelNo) panelNo.textContent = el.getAttribute("data-no");
@@ -1338,12 +1342,22 @@
   // ============ SPOTLIGHT HOVER (bound once, delegated) ============
   function initSpotlight(){
     document.addEventListener("pointermove", function(e){
-      var el = e.target && e.target.closest ? e.target.closest(".spotlight") : null;
+      var el = e.target && e.target.closest ? e.target.closest(".spotlight, .btn-primary") : null;
       if(!el) return;
       var r = el.getBoundingClientRect();
       el.style.setProperty("--mx", (e.clientX - r.left) + "px");
       el.style.setProperty("--my", (e.clientY - r.top) + "px");
     }, {passive:true});
+  }
+
+  // ============ SMOOTH SCROLL (Lenis) ============
+  function initLenis(){
+    if(reduceMotion || typeof window.Lenis !== "function") return;
+    lenisInstance = new window.Lenis({ duration: 1.05, smoothWheel: true });
+    requestAnimationFrame(function raf(time){
+      lenisInstance.raf(time);
+      requestAnimationFrame(raf);
+    });
   }
 
   // ============ NEURAL NETWORK BACKGROUND (canvas, lives outside #app) ============
@@ -1594,6 +1608,7 @@
   })();
 
   initSpotlight();
+  initLenis();
   initNeuralBackground();
   // Load server-persisted dashboard data before the first render.
   loadSiteData().then(function(){

@@ -142,9 +142,11 @@
   @media (prefers-reduced-motion: reduce){ #neuralCanvas{display:none;} }
 
   /* ---------- Spotlight hover ---------- */
-  .spotlight{position:relative;}
-  .spotlight::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), var(--accent-glow), transparent 72%);opacity:0;transition:opacity .35s ease;pointer-events:none;}
-  .spotlight:hover::after{opacity:1;}
+  .spotlight,.btn-primary{position:relative;}
+  .btn-primary{overflow:hidden;}
+  .spotlight::after,.btn-primary::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), var(--accent-glow), transparent 72%);opacity:0;transition:opacity .35s ease;pointer-events:none;}
+  .spotlight:hover::after,.btn-primary:hover::after{opacity:1;}
+  .btn-primary::after{background:radial-gradient(140px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.45), transparent 72%);mix-blend-mode:overlay;}
 
   /* ---------- Nav ---------- */
   header{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 82%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .25s ease, box-shadow .25s ease;}
@@ -299,11 +301,13 @@
   .p-step.active .tag{color:var(--accent);border-color:var(--accent);}
   .p-step.active h4{color:var(--text);}
   .chip-field{position:absolute;inset:0;pointer-events:none;z-index:1;}
-  .chip{position:absolute;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);padding:10px 14px;border-radius:10px;box-shadow:0 14px 30px -14px var(--shadow);font-size:12.5px;white-space:nowrap;}
+  .chip{position:absolute;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);padding:10px 14px;border-radius:10px;box-shadow:0 14px 30px -14px var(--shadow);font-size:12.5px;white-space:nowrap;opacity:.45;filter:grayscale(.5);transform:scale(.96);transition:opacity .45s ease, filter .45s ease, transform .45s ease, border-color .45s ease, box-shadow .45s ease;}
+  .chip.active{opacity:1;filter:none;transform:scale(1);border-color:var(--accent);box-shadow:0 14px 30px -14px var(--shadow), 0 0 0 1px var(--accent-glow);}
   .chip b{display:block;font-size:13px;}
   .chip span{color:var(--text-muted);font-family:var(--mono);font-size:11px;}
-  .chip-dot{width:26px;height:26px;border-radius:7px;background:var(--accent-glow);color:var(--accent);display:flex;align-items:center;justify-content:center;flex:none;}
+  .chip-dot{width:26px;height:26px;border-radius:7px;background:var(--accent-glow);color:var(--accent);display:flex;align-items:center;justify-content:center;flex:none;transition:background .45s ease, color .45s ease;}
   .chip-dot svg{width:14px;height:14px;}
+  .chip.active .chip-dot{background:var(--accent);color:var(--accent-text);}
   @media (max-width:1080px){.chip-field{display:none;}}
 
   /* ---------- Grids / cards ---------- */
