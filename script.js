@@ -325,8 +325,7 @@
       '<div class="hero' + (videoActive ? ' hero-video' : '') + '">' +
         (videoActive ? (
           '<div class="hero-video-bg" aria-hidden="true"><iframe src="'+esc(heroVideoSrc)+'" title="" tabindex="-1" allow="autoplay; encrypted-media" loading="eager"></iframe></div>' +
-          '<div class="hero-video-scrim" aria-hidden="true"></div>' +
-          '<span class="hero-video-badge">'+iconSvg("video")+'&nbsp;Showreel playing</span>'
+          '<div class="hero-video-scrim" aria-hidden="true"></div>'
         ) : '') +
         '<div class="wrap hero-grid' + (videoActive ? ' hero-grid-solo' : '') + '">' +
           '<div class="hero-slider" id="heroSlider">' +
