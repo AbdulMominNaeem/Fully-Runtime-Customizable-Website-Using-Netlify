@@ -143,9 +143,18 @@
     reader.readAsDataURL(file);
   }
   function companyLogoHtml(sizeClass){
-    var logo = DATA.company && DATA.company.logo;
-    if(logo){
-      return '<img class="brand-logo-img '+(sizeClass||'')+'" src="'+esc(logo)+'" alt="'+esc(DATA.company.name)+' logo">';
+    var c = DATA.company || {};
+    var cls = 'brand-logo-img ' + (sizeClass||'');
+    var lightLogo = c.logoBlack || c.logo || "";
+    var darkLogo = c.logoWhite || c.logo || "";
+    if(lightLogo && darkLogo && lightLogo !== darkLogo){
+      // Distinct black/white logos uploaded — swap by theme via CSS (see .logo-swap rules).
+      return '<img class="'+cls+' logo-swap" data-variant="light" src="'+esc(lightLogo)+'" alt="'+esc(c.name)+' logo">' +
+             '<img class="'+cls+' logo-swap" data-variant="dark" src="'+esc(darkLogo)+'" alt="'+esc(c.name)+' logo">';
+    }
+    var single = lightLogo || darkLogo;
+    if(single){
+      return '<img class="'+cls+'" src="'+esc(single)+'" alt="'+esc(c.name)+' logo">';
     }
     return '<svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="16" cy="13" r="8" fill="currentColor"/><path d="M12 24h8a1.5 1.5 0 0 1 1.5 1.5v.5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2v-.5A1.5 1.5 0 0 1 12 24Z" fill="currentColor"/><rect x="14.5" y="22" width="3" height="3" fill="currentColor"/></svg>';
   }
@@ -687,23 +696,28 @@
       return '<div class="field toggle-field"><label class="toggle-switch"><input type="checkbox" data-ctoggle="'+key+'"'+(val?' checked':'')+'><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">'+esc(label)+'</span></label>' +
         (hint ? '<span class="field-hint">'+esc(hint)+'</span>' : '') + '</div>';
     }
+    function logoFieldHtml(key, label, hint, val){
+      return '<div class="form-row"><div class="field full img-field logo-field" data-logo-key="'+key+'">' +
+        '<label>'+esc(label)+'</label>' +
+        '<input type="hidden" data-cfield="'+key+'" value="'+esc(val||'')+'">' +
+        '<div class="img-upload-row">' +
+          '<label class="btn btn-ghost btn-sm img-upload-btn">'+(val?'Replace logo':'Upload logo')+'<input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" class="company-logo-input" hidden></label>' +
+          '<button type="button" class="btn btn-ghost btn-sm company-logo-clear"'+(val?'':' hidden')+'>Remove</button>' +
+          '<span class="img-upload-status"></span>' +
+        '</div>' +
+        '<span class="field-hint">'+esc(hint)+'</span>' +
+        '<div class="img-preview-wrap"'+(val?'':' hidden')+'><img class="img-preview" src="'+esc(val||'')+'" alt="'+esc(label)+' preview"></div>' +
+      '</div></div>';
+    }
     var statsRows = c.stats.map(function(s,i){
       return '<div class="form-row"><div class="field"><label>Stat '+(i+1)+' value</label><input type="text" data-stat-value="'+i+'" value="'+esc(s.value)+'"></div><div class="field"><label>Stat '+(i+1)+' label</label><input type="text" data-stat-label="'+i+'" value="'+esc(s.label)+'"></div></div>';
     }).join("");
     return '' +
     '<form id="companyForm" class="admin-form-card reveal">' +
       '<h3>Company info</h3>' +
-      '<div class="form-row"><div class="field full img-field logo-field">' +
-        '<label>Company logo</label>' +
-        '<input type="hidden" data-cfield="logo" value="'+esc(c.logo||'')+'">' +
-        '<div class="img-upload-row">' +
-          '<label class="btn btn-ghost btn-sm img-upload-btn">'+(c.logo?'Replace logo':'Upload logo')+'<input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" class="company-logo-input" hidden></label>' +
-          '<button type="button" class="btn btn-ghost btn-sm company-logo-clear"'+(c.logo?'':' hidden')+'>Remove</button>' +
-          '<span class="img-upload-status"></span>' +
-        '</div>' +
-        '<span class="field-hint">Upload a PNG, JPG, WebP, or SVG. The logo is stored in the page and appears in the site header and footer after publishing.</span>' +
-        '<div class="img-preview-wrap"'+(c.logo?'':' hidden')+'><img class="img-preview" src="'+esc(c.logo||'')+'" alt="Company logo preview"></div>' +
-      '</div></div>' +
+      logoFieldHtml("logo", "Company logo (fallback)", "Upload a PNG, JPG, WebP, or SVG. Used everywhere unless you add the black/white theme logos below.", c.logo) +
+      logoFieldHtml("logoBlack", "Black logo — for light theme", "Optional. A dark-colored logo, shown automatically when a visitor's site theme is light.", c.logoBlack) +
+      logoFieldHtml("logoWhite", "White logo — for dark theme", "Optional. A light-colored logo, shown automatically when a visitor's site theme is dark.", c.logoWhite) +
       '<div class="form-row">' + inp("Company name","name",c.name) + inp("Support email","email",c.email,"text") + '</div>' +
       '<div class="form-row">' + inp("Phone number","phone",c.phone) + inp("Careers / response time","responseTime",c.responseTime) + '</div>' +
       '<div class="form-row">' + ta("Address / studio line","address",c.address) + '</div>' +
@@ -1196,10 +1210,10 @@
     var publishBtn = document.getElementById("publishBtn");
     if(publishBtn) publishBtn.addEventListener("click", function(){ doPublish(); });
 
-    var companyLogoInput = document.querySelector(".company-logo-input");
-    if(companyLogoInput){
-      var logoField = companyLogoInput.closest(".logo-field");
-      var logoHidden = logoField.querySelector('[data-cfield="logo"]');
+    document.querySelectorAll(".logo-field").forEach(function(logoField){
+      var companyLogoInput = logoField.querySelector(".company-logo-input");
+      if(!companyLogoInput) return;
+      var logoHidden = logoField.querySelector('[data-cfield="'+logoField.getAttribute("data-logo-key")+'"]');
       var logoWrap = logoField.querySelector(".img-preview-wrap");
       var logoImg = logoWrap.querySelector(".img-preview");
       var logoStatus = logoField.querySelector(".img-upload-status");
@@ -1228,7 +1242,7 @@
         if(logoUploadText) logoUploadText.textContent = "Upload logo";
         companyLogoInput.value = "";
       });
-    }
+    });
 
     var companyForm = document.getElementById("companyForm");
     if(companyForm) companyForm.addEventListener("submit", function(e){
