@@ -373,10 +373,10 @@
           '<div class="process-sticky">' +
             '<div class="process-panel"><span class="step-no" id="panelNo">STEP 01 / 05</span><h3 id="panelTitle">We audit where you\'re actually invisible.</h3><p id="panelDesc">A full pass across Google, AI Overviews, ChatGPT, Perplexity, and your video channels — so we fix real gaps, not guesses.</p><div class="step-track" id="stepTrack"><i class="done"></i><i></i><i></i><i></i><i></i></div></div>' +
             '<div class="chip-field" aria-hidden="true">' +
-              '<div class="chip" style="top:-88px; left:56%;"><span class="chip-dot">'+iconSvg("search")+'</span><span><b>Citation tracking</b><span>4 LLMs, daily</span></span></div>' +
-              '<div class="chip" style="top:118px; left:76%;"><span class="chip-dot">'+iconSvg("content")+'</span><span><b>SERP share</b><span>up 340% avg</span></span></div>' +
-              '<div class="chip" style="top:330px; left:2%;"><span class="chip-dot">'+iconSvg("video")+'</span><span><b>Cut on schedule</b><span>weekly shorts</span></span></div>' +
-              '<div class="chip" style="top:520px; left:64%;"><span class="chip-dot">'+iconSvg("answers")+'</span><span><b>Reported weekly</b><span>live dashboard</span></span></div>' +
+              '<div class="chip" style="top:345px; left:6%;"><span class="chip-dot">'+iconSvg("search")+'</span><span><b>Citation tracking</b><span>4 LLMs, daily</span></span></div>' +
+              '<div class="chip" style="top:345px; left:60%;"><span class="chip-dot">'+iconSvg("content")+'</span><span><b>SERP share</b><span>up 340% avg</span></span></div>' +
+              '<div class="chip" style="top:465px; left:4%;"><span class="chip-dot">'+iconSvg("video")+'</span><span><b>Cut on schedule</b><span>weekly shorts</span></span></div>' +
+              '<div class="chip" style="top:465px; left:55%;"><span class="chip-dot">'+iconSvg("answers")+'</span><span><b>Reported weekly</b><span>live dashboard</span></span></div>' +
             '</div>' +
           '</div>' +
           '<div class="process-steps" id="processSteps">' +
