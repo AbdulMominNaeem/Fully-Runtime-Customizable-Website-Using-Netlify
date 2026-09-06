@@ -364,9 +364,10 @@
         '</div>' +
       '</div>' +
 
-      '<div class="strip"><div class="wrap"><span class="strip-label">Trusted by teams at</span><div class="strip-logos">' +
+      '<div class="strip"><div class="wrap"><span class="strip-label">Trusted by teams at</span><div class="strip-logos"><div class="strip-track">' +
         DATA.projects.slice(0,5).map(function(p){ return '<span>'+esc(p.client.toUpperCase())+'</span>'; }).join("") +
-      '</div></div></div>' +
+        DATA.projects.slice(0,5).map(function(p){ return '<span>'+esc(p.client.toUpperCase())+'</span>'; }).join("") +
+      '</div></div></div></div>' +
 
       '<section class="process"><div class="wrap">' +
         '<div class="section-head reveal"><span class="eyebrow">HOW WE WORK</span><h2>Five stages. One funnel, not four.</h2><p>Search, AI answers, generative chat, and video used to be separate projects. We run them as one system, in order.</p></div>' +
@@ -1615,10 +1616,20 @@
     render();
     scrollForRoute();
   });
-  window.addEventListener("hashchange", function(){ render(); scrollForRoute(); });
+  window.addEventListener("hashchange", function(){
+    var main = document.getElementById("top");
+    if(main && !reduceMotion){
+      main.classList.add("route-fade");
+      setTimeout(function(){ render(); scrollForRoute(); }, 140);
+    } else { render(); scrollForRoute(); }
+  });
   window.addEventListener("scroll", function(){
     var h = document.getElementById("siteHeader");
     if(h) h.classList.toggle("scrolled", window.scrollY > 8);
+    if(!reduceMotion){
+      var panel = document.querySelector(".hero .panel");
+      if(panel) panel.style.transform = "translateY(" + Math.min(window.scrollY * 0.08, 60) + "px)";
+    }
   }, {passive:true});
 })();
 
