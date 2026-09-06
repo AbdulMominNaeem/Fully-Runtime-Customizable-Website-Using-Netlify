@@ -200,6 +200,7 @@
   .page.active{display:block;}
 
   section{padding:110px 0;}
+  .page[data-page="home"]{padding-top:0;}
   .page-hero{padding:64px 0 56px;}
   .page-hero h1{font-size:clamp(38px,5.4vw,64px);line-height:1.02;margin:18px 0 20px;}
   .page-hero p.lede{max-width:60ch;font-size:17px;color:var(--text-muted);}
