@@ -274,16 +274,18 @@
     ].filter(function(g){ return g.items.length; });
     if(defs.length < 2){
       var only = defs.length ? defs[0].items : DATA.services;
-      return only.map(svcLinkHtml).join("") + '<a href="#/services" class="nd-all">All services &rarr;</a>';
+      return '<a href="#/services" class="mega-panel-all">All Services &rarr;</a>' + only.map(svcLinkHtml).join("");
     }
     var nav = defs.map(function(g,i){
       return '<button type="button" class="mega-nav-item'+(i===0?' active':'')+'" data-group-panel="'+g.key+'">'+esc(g.label)+
         '<svg class="mega-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></button>';
     }).join("");
     var panels = defs.map(function(g,i){
-      return '<div class="mega-panel'+(i===0?' active':'')+'" data-group-panel="'+g.key+'">' + g.items.map(svcLinkHtml).join("") + '</div>';
+      return '<div class="mega-panel'+(i===0?' active':'')+'" data-group-panel="'+g.key+'">' +
+        '<a href="#/services" class="mega-panel-all">All '+esc(g.label)+' &rarr;</a>' +
+        g.items.map(svcLinkHtml).join("") + '</div>';
     }).join("");
-    return '<div class="mega-nav">'+nav+'</div><div class="mega-panels">'+panels+'</div><a href="#/services" class="nd-all">All services &rarr;</a>';
+    return '<div class="mega-nav">'+nav+'</div><div class="mega-panels">'+panels+'</div>';
   }
 
   function headerHtml(){
