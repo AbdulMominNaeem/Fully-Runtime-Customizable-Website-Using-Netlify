@@ -1138,12 +1138,6 @@
       var open = mobileNav.classList.toggle("open");
       hamburger.setAttribute("aria-expanded", open ? "true" : "false");
     });
-    if(mobileNav){
-      mobileNav.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", function(){ mobileNav.classList.remove("open"); }); });
-      var mobSvcBtn = mobileNav.querySelector('button.navlink[data-route="services"]');
-      if(mobSvcBtn) mobSvcBtn.addEventListener("click", function(){ mobileNav.classList.remove("open"); window.location.hash = "#/services"; });
-    }
-
     var dropdowns = document.querySelectorAll(".navdrop-wrap[data-dropdown]");
     function closeDropdowns(except){
       dropdowns.forEach(function(w){
