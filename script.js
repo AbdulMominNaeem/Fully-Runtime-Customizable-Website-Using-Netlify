@@ -189,6 +189,7 @@
   // ============ FIELD SCHEMAS (admin CRUD) ============
   var SCHEMAS = {
     services: { label:"Service", plural:"Services", fields:[
+      {key:"group", label:"Service group (shown as a heading in the nav menu)", type:"select", options:["Marketing Services","Development Services"]},
       {key:"category", label:"Category label (e.g. SEARCH)", type:"text"},
       {key:"title", label:"Title", type:"text", required:true},
       {key:"tagline", label:"Tagline", type:"text"},
@@ -254,12 +255,24 @@
     return iconSvg(map[svc.id] || "search");
   }
 
+  function serviceGroups(){
+    var marketing = [], development = [];
+    DATA.services.forEach(function(s){
+      (s.group === "Development Services" ? development : marketing).push(s);
+    });
+    return {marketing: marketing, development: development};
+  }
+  function svcLinkHtml(s){
+    return '<a href="#/services/'+esc(s.id)+'">'+esc(s.title)+'</a>';
+  }
   function navServicesDropdown(){
     if(!DATA.services.length) return '<div class="nd-empty">No services yet</div>';
-    var items = DATA.services.map(function(s){
-      return '<a href="#/services/'+esc(s.id)+'">'+esc(s.title)+'</a>';
-    }).join("");
-    return items + '<a href="#/services" class="nd-all">All services &rarr;</a>';
+    var groups = serviceGroups();
+    var cols = '<div class="mega-col"><span class="mega-heading">Marketing Services</span>' + groups.marketing.map(svcLinkHtml).join("") + '</div>';
+    if(groups.development.length){
+      cols += '<div class="mega-col"><span class="mega-heading">Development Services</span>' + groups.development.map(svcLinkHtml).join("") + '</div>';
+    }
+    return cols + '<a href="#/services" class="nd-all">All services &rarr;</a>';
   }
 
   function headerHtml(){
@@ -273,7 +286,7 @@
           '<li><a href="#/" data-route="home">Home</a></li>' +
           '<li class="navdrop-wrap" data-dropdown="services" id="servicesDropWrap">' +
             '<button type="button" class="navlink" data-route="services" id="servicesDropBtn" aria-expanded="false">Services <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>' +
-            '<div class="navdrop services-drop"><a href="#/services" class="navdrop-feature">All Services<span>Explore the full service stack</span></a>'+DATA.services.map(function(s){return '<a href="#/services/'+esc(s.id)+'">'+esc(s.title)+'</a>';}).join("")+'</div>' +
+            '<div class="navdrop services-drop mega">'+navServicesDropdown()+'</div>' +
           '</li>' +
           '<li><a href="#/work" data-route="work">Work</a></li>' +
           '<li class="navdrop-wrap" data-dropdown="company" id="companyDropWrap">' +
@@ -298,7 +311,12 @@
       '<div class="mobile-nav" id="mobileNav">' +
         '<a href="#/" data-route="home">Home</a>' +
         '<button type="button" class="navlink" data-mobile-menu="services" data-route="services" aria-expanded="false">Services <span>+</span></button>' +
-        '<div class="mn-sub" data-mobile-sub="services"><a href="#/services">All Services</a>'+DATA.services.map(function(s){return '<a href="#/services/'+esc(s.id)+'">'+esc(s.title)+'</a>';}).join("")+'</div>' +
+        '<div class="mn-sub" data-mobile-sub="services"><a href="#/services">All Services</a>' + (function(){
+          var groups = serviceGroups();
+          var out = '<span class="mn-sub-heading">Marketing Services</span>' + groups.marketing.map(svcLinkHtml).join("");
+          if(groups.development.length) out += '<span class="mn-sub-heading">Development Services</span>' + groups.development.map(svcLinkHtml).join("");
+          return out;
+        })() + '</div>' +
         '<a href="#/work" data-route="work">Work</a>' +
         '<button type="button" class="navlink" data-mobile-menu="company" data-route="company" aria-expanded="false">Company <span>+</span></button>' +
         '<div class="mn-sub" data-mobile-sub="company"><a href="#/about">About</a><a href="#/team">Team</a><a href="#/careers">Careers</a><a href="#/testimonials">Testimonials</a></div>' +
