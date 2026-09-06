@@ -268,11 +268,22 @@
   function navServicesDropdown(){
     if(!DATA.services.length) return '<div class="nd-empty">No services yet</div>';
     var groups = serviceGroups();
-    var cols = '<div class="mega-col"><span class="mega-heading">Marketing Services</span>' + groups.marketing.map(svcLinkHtml).join("") + '</div>';
-    if(groups.development.length){
-      cols += '<div class="mega-col"><span class="mega-heading">Development Services</span>' + groups.development.map(svcLinkHtml).join("") + '</div>';
+    var defs = [
+      {key:"marketing", label:"Marketing Services", items:groups.marketing},
+      {key:"development", label:"Development Services", items:groups.development}
+    ].filter(function(g){ return g.items.length; });
+    if(defs.length < 2){
+      var only = defs.length ? defs[0].items : DATA.services;
+      return only.map(svcLinkHtml).join("") + '<a href="#/services" class="nd-all">All services &rarr;</a>';
     }
-    return cols + '<a href="#/services" class="nd-all">All services &rarr;</a>';
+    var nav = defs.map(function(g,i){
+      return '<button type="button" class="mega-nav-item'+(i===0?' active':'')+'" data-group-panel="'+g.key+'">'+esc(g.label)+
+        '<svg class="mega-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></button>';
+    }).join("");
+    var panels = defs.map(function(g,i){
+      return '<div class="mega-panel'+(i===0?' active':'')+'" data-group-panel="'+g.key+'">' + g.items.map(svcLinkHtml).join("") + '</div>';
+    }).join("");
+    return '<div class="mega-nav">'+nav+'</div><div class="mega-panels">'+panels+'</div><a href="#/services" class="nd-all">All services &rarr;</a>';
   }
 
   function headerHtml(){
@@ -286,7 +297,7 @@
           '<li><a href="#/" data-route="home">Home</a></li>' +
           '<li class="navdrop-wrap" data-dropdown="services" id="servicesDropWrap">' +
             '<button type="button" class="navlink" data-route="services" id="servicesDropBtn" aria-expanded="false">Services <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>' +
-            '<div class="navdrop services-drop mega">'+navServicesDropdown()+'</div>' +
+            '<div class="navdrop services-drop mega'+(serviceGroups().marketing.length && serviceGroups().development.length ? ' mega-switcher' : '')+'">'+navServicesDropdown()+'</div>' +
           '</li>' +
           '<li><a href="#/work" data-route="work">Work</a></li>' +
           '<li class="navdrop-wrap" data-dropdown="company" id="companyDropWrap">' +
@@ -1146,6 +1157,22 @@
         closeDropdowns(w);
         w.classList.toggle("open", !isOpen);
         b.setAttribute("aria-expanded", !isOpen ? "true" : "false");
+      });
+    });
+    document.querySelectorAll(".mega-nav").forEach(function(nav){
+      var panelsWrap = nav.nextElementSibling;
+      if(!panelsWrap || !panelsWrap.classList.contains("mega-panels")) return;
+      var navItems = nav.querySelectorAll(".mega-nav-item");
+      var panels = panelsWrap.querySelectorAll(".mega-panel");
+      function activate(key){
+        navItems.forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-group-panel")===key); });
+        panels.forEach(function(p){ p.classList.toggle("active", p.getAttribute("data-group-panel")===key); });
+      }
+      navItems.forEach(function(btn){
+        var key = btn.getAttribute("data-group-panel");
+        btn.addEventListener("mouseenter", function(){ activate(key); });
+        btn.addEventListener("focus", function(){ activate(key); });
+        btn.addEventListener("click", function(e){ e.preventDefault(); activate(key); });
       });
     });
     document.addEventListener("click", function(e){
