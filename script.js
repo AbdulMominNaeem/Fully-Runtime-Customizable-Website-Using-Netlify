@@ -77,6 +77,7 @@
       .then(function(r){ if(!r.ok) throw new Error('Saved site data could not be loaded (HTTP ' + r.status + ').'); return r.json(); })
       .then(function(saved){
         if(saved && saved.company){ DATA = saved; }
+        DATA.navLinks = DATA.navLinks || [];
         designSettings();
         applyDesignSettings();
         dataLoaded = true;
@@ -229,7 +230,11 @@
       {key:"email", label:"Email", type:"text"},
       {key:"role", label:"Role", type:"text"},
       {key:"note", label:"Note", type:"text"}
-    ], summary:function(it){ return {main: it.name, sub: it.role || ""}; } }
+    ], summary:function(it){ return {main: it.name, sub: it.role || ""}; } },
+    navLinks: { label:"Nav link", plural:"Nav bar links", fields:[
+      {key:"label", label:"Label (shown in the nav bar)", type:"text", required:true},
+      {key:"url", label:"Link (e.g. #/about or https://example.com)", type:"text", required:true}
+    ], summary:function(it){ return {main: it.label, sub: it.url || ""}; } }
   };
 
   // ============ SHELL / RENDER (pure functions of DATA) ============
@@ -266,6 +271,14 @@
   function svcLinkHtml(s){
     return '<a href="#/services/'+esc(s.id)+'">'+esc(s.title)+'</a>';
   }
+  function navShown(key){
+    var ns = DATA.company.navShow;
+    return !ns || ns[key] !== false;
+  }
+  function customNavLinkHtml(l){
+    var external = /^https?:\/\//i.test(l.url || "");
+    return '<a href="'+esc(l.url)+'"'+(external ? ' target="_blank" rel="noopener"' : '')+'>'+esc(l.label)+'</a>';
+  }
   function navServicesDropdown(){
     if(!DATA.services.length) return '<div class="nd-empty">No services yet</div>';
     var groups = serviceGroups();
@@ -298,20 +311,24 @@
         '</a>' +
         '<ul class="nav-links" id="navLinks">' +
           '<li><a href="#/" data-route="home">Home</a></li>' +
+          (navShown("services") ? (
           '<li class="navdrop-wrap" data-dropdown="services" id="servicesDropWrap">' +
             '<button type="button" class="navlink" data-route="services" id="servicesDropBtn" aria-expanded="false">Services <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>' +
             '<div class="navdrop services-drop mega'+(serviceGroups().marketing.length && serviceGroups().development.length ? ' mega-switcher' : '')+'">'+navServicesDropdown()+'</div>' +
-          '</li>' +
-          '<li><a href="#/work" data-route="work">Work</a></li>' +
+          '</li>') : '') +
+          (navShown("work") ? '<li><a href="#/work" data-route="work">Work</a></li>' : '') +
+          (navShown("company") ? (
           '<li class="navdrop-wrap" data-dropdown="company" id="companyDropWrap">' +
             '<button type="button" class="navlink" data-route="company" id="companyDropBtn" aria-expanded="false">Company <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>' +
             '<div class="navdrop company-drop"><a href="#/about">About<span>Who we are and how we work</span></a><a href="#/team">Team<span>The people behind the work</span></a><a href="#/careers">Careers<span>Join the studio</span></a><a href="#/testimonials">Testimonials<span>Client feedback and results</span></a></div>' +
-          '</li>' +
+          '</li>') : '') +
+          (navShown("resources") ? (
           '<li class="navdrop-wrap" data-dropdown="resources" id="resourcesDropWrap">' +
             '<button type="button" class="navlink" data-route="resources" id="resourcesDropBtn" aria-expanded="false">Resources <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>' +
             '<div class="navdrop resources-drop"><a href="#/resources">Resources<span>Guides, insights and playbooks</span></a><a href="#/systems">AI Growth Systems<span>Connected systems for modern growth</span></a><a href="#/tools">Growth Tools<span>Interactive audits and calculators</span></a><a href="#/configurator">Build Your System<span>Configure a growth stack</span></a></div>' +
-          '</li>' +
-          '<li><a href="#/contact" data-route="contact">Contact</a></li>' +
+          '</li>') : '') +
+          (DATA.navLinks||[]).map(function(l){ return '<li>'+customNavLinkHtml(l)+'</li>'; }).join("") +
+          (navShown("contact") ? '<li><a href="#/contact" data-route="contact">Contact</a></li>' : '') +
         '</ul>' +
         '<div class="nav-right">' +
           '<button class="theme-btn" id="themeToggle" aria-label="Toggle color theme" type="button">' +
@@ -324,19 +341,23 @@
       '</nav>' +
       '<div class="mobile-nav" id="mobileNav">' +
         '<a href="#/" data-route="home">Home</a>' +
+        (navShown("services") ? (
         '<button type="button" class="navlink" data-mobile-menu="services" data-route="services" aria-expanded="false">Services <span>+</span></button>' +
         '<div class="mn-sub" data-mobile-sub="services"><a href="#/services">All Services</a>' + (function(){
           var groups = serviceGroups();
           var out = '<span class="mn-sub-heading">Marketing Services</span>' + groups.marketing.map(svcLinkHtml).join("");
           if(groups.development.length) out += '<span class="mn-sub-heading">Development Services</span>' + groups.development.map(svcLinkHtml).join("");
           return out;
-        })() + '</div>' +
-        '<a href="#/work" data-route="work">Work</a>' +
+        })() + '</div>') : '') +
+        (navShown("work") ? '<a href="#/work" data-route="work">Work</a>' : '') +
+        (navShown("company") ? (
         '<button type="button" class="navlink" data-mobile-menu="company" data-route="company" aria-expanded="false">Company <span>+</span></button>' +
-        '<div class="mn-sub" data-mobile-sub="company"><a href="#/about">About</a><a href="#/team">Team</a><a href="#/careers">Careers</a><a href="#/testimonials">Testimonials</a></div>' +
+        '<div class="mn-sub" data-mobile-sub="company"><a href="#/about">About</a><a href="#/team">Team</a><a href="#/careers">Careers</a><a href="#/testimonials">Testimonials</a></div>') : '') +
+        (navShown("resources") ? (
         '<button type="button" class="navlink" data-mobile-menu="resources" data-route="resources" aria-expanded="false">Resources <span>+</span></button>' +
-        '<div class="mn-sub" data-mobile-sub="resources"><a href="#/resources">Resources</a><a href="#/systems">AI Growth Systems</a><a href="#/tools">Growth Tools</a><a href="#/configurator">Build Your System</a></div>' +
-        '<a href="#/contact" data-route="contact">Contact</a>' +
+        '<div class="mn-sub" data-mobile-sub="resources"><a href="#/resources">Resources</a><a href="#/systems">AI Growth Systems</a><a href="#/tools">Growth Tools</a><a href="#/configurator">Build Your System</a></div>') : '') +
+        (DATA.navLinks||[]).map(customNavLinkHtml).join("") +
+        (navShown("contact") ? '<a href="#/contact" data-route="contact">Contact</a>' : '') +
         '<a href="#/contact" class="btn btn-primary mobile-cta">Get a visibility audit →</a>' +
       '</div>' +
     '</header>';
@@ -709,13 +730,15 @@
       '</div>';
     }).join("") : '<div class="admin-empty">No '+esc(schema.plural.toLowerCase())+' yet — add the first one below.</div>';
     return '<div class="admin-list">'+rows+'</div><a href="#/admin/'+collectionKey+'/new" class="btn btn-primary btn-sm">+ Add '+esc(schema.label.toLowerCase())+'</a>' +
-      (collectionKey === "services" ? '<p class="form-note" style="margin-top:14px;">New services appear automatically in the Services menu and page — no code changes needed.</p>' : "");
+      (collectionKey === "services" ? '<p class="form-note" style="margin-top:14px;">New services appear automatically in the Services menu and page — no code changes needed.</p>' : "") +
+      (collectionKey === "navLinks" ? '<p class="form-note" style="margin-top:14px;">These appear as extra items in the nav bar, right before &ldquo;Contact&rdquo;. To hide a built-in item (Services, Work, Company, Resources, Contact) instead of adding one, use Company &rarr; Navigation.</p>' : "");
   }
 
   function companyFormHtml(){
     var c = DATA.company;
     designSettings();
     c.design = DATA.design;
+    c.navShow = Object.assign({services:true, work:true, company:true, resources:true, contact:true}, c.navShow || {});
     function colorInp(label,key,val){ return '<div class="color-field"><label>'+esc(label)+'</label><div><input type="color" data-design-field="'+esc(key)+'" value="'+esc(val)+'"><input type="text" data-design-field="'+esc(key)+'" value="'+esc(val)+'"></div></div>'; }
     function rangeInp(label,key,val,min,max,step){ return '<div class="field range-field"><label>'+esc(label)+' <output>'+esc(val)+'</output></label><input type="range" data-design-field="'+esc(key)+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+esc(val)+'"></div>'; }
     function inp(label, key, val, type){
@@ -760,6 +783,11 @@
       '<div class="form-row">' + inp("Showreel video URL (YouTube or Vimeo link)","showreelUrl",c.showreelUrl) + toggleField("Play as homepage banner background", "showreelEnabled", c.showreelEnabled, "When on, the video autoplays muted behind the hero text. When off, the hero looks exactly as it does now.") + '</div>' +
       '<div class="form-row">' + inp("LinkedIn URL","social.linkedin",c.social.linkedin) + inp("Instagram URL","social.instagram",c.social.instagram) + '</div>' +
       '<div class="form-row">' + inp("YouTube URL","social.youtube",c.social.youtube) + inp("Admin PIN","adminPin",c.adminPin) + '</div>' +
+      '<div class="admin-section-divider"><span>Navigation</span></div>' +
+      '<div class="form-row">' + toggleField("Show \"Services\" in the nav bar","navShow.services",c.navShow.services) + toggleField("Show \"Work\" in the nav bar","navShow.work",c.navShow.work) + '</div>' +
+      '<div class="form-row">' + toggleField("Show \"Company\" in the nav bar","navShow.company",c.navShow.company) + toggleField("Show \"Resources\" in the nav bar","navShow.resources",c.navShow.resources) + '</div>' +
+      '<div class="form-row">' + toggleField("Show \"Contact\" in the nav bar","navShow.contact",c.navShow.contact) + '</div>' +
+      '<p class="field-hint" style="margin:-4px 0 4px;">To add a brand-new item to the nav bar instead of hiding one, use the <a href="#/admin/navLinks">Nav bar</a> tab.</p>' +
       '<div class="admin-section-divider"><span>Theme &amp; neural background</span></div>' +
       '<div class="design-grid">' +
         '<div class="design-card"><h4>Light theme</h4>' +
@@ -780,6 +808,7 @@
   var ADMIN_TABS = [
     {key:"overview", label:"Overview"},
     {key:"company", label:"Company"},
+    {key:"navLinks", label:"Nav bar"},
     {key:"services", label:"Services"},
     {key:"projects", label:"Projects"},
     {key:"team", label:"Team"},
@@ -789,6 +818,7 @@
 
   function adminOverviewHtml(){
     return '<div class="admin-list">' +
+      '<div class="admin-row"><div class="ar-main"><b>'+(DATA.navLinks||[]).length+' custom nav links</b><span>Extra items in the top nav bar &mdash; also toggle built-in items in Company &rarr; Navigation</span></div><div class="ar-actions"><a href="#/admin/navLinks" class="btn btn-ghost btn-sm">Manage</a></div></div>' +
       '<div class="admin-row"><div class="ar-main"><b>'+DATA.services.length+' services</b><span>Shown on the Services page & nav menu</span></div><div class="ar-actions"><a href="#/admin/services" class="btn btn-ghost btn-sm">Manage</a></div></div>' +
       '<div class="admin-row"><div class="ar-main"><b>'+DATA.projects.length+' projects</b><span>Case studies on the Work page</span></div><div class="ar-actions"><a href="#/admin/projects" class="btn btn-ghost btn-sm">Manage</a></div></div>' +
       '<div class="admin-row"><div class="ar-main"><b>'+DATA.team.length+' team members</b><span>Shown on the Team page</span></div><div class="ar-actions"><a href="#/admin/team" class="btn btn-ghost btn-sm">Manage</a></div></div>' +
@@ -907,7 +937,7 @@
   }
 
   function primaryFieldKey(collectionKey){
-    var map = {services:"title", projects:"client", team:"name", jobs:"title", access:"name"};
+    var map = {services:"title", projects:"client", team:"name", jobs:"title", access:"name", navLinks:"label"};
     return map[collectionKey];
   }
   function setDotted(obj, path, val){
