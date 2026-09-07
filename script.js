@@ -86,6 +86,7 @@
     return dataLoadPromise;
   }
   var heroSliderTimer = null;
+  var svcCoverflowResizeHandler = null;
 
   // ============ HELPERS ============
   function esc(s){
@@ -436,8 +437,8 @@
           '<div class="section-head"><span class="eyebrow">WHAT WE DO</span><h2>'+DATA.services.length+' disciplines, run as one.</h2><p>Each is a full service on its own page — see the full breakdown. Drag or use the arrows to browse.</p></div>' +
           '<div class="slider-nav"><button type="button" class="slider-btn" id="svcSliderPrev" aria-label="Previous services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><button type="button" class="slider-btn" id="svcSliderNext" aria-label="Next services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>' +
         '</div>' +
-        '<div class="svc-slider reveal" id="svcSlider">' + DATA.services.map(function(s){
-          return '<a href="#/services/'+esc(s.id)+'" class="svc-slide-card spotlight"><span class="cap-icon">'+iconForService(s)+'</span><h3>'+esc(s.title)+'</h3><p>'+esc(s.tagline)+'</p></a>';
+        '<div class="svc-slider reveal" id="svcSlider">' + DATA.services.map(function(s,i){
+          return '<a href="#/services/'+esc(s.id)+'" class="svc-slide-card spotlight"><div class="svc-card-top"><span class="cap-icon">'+iconForService(s)+'</span><span class="svc-card-no">'+String(i+1).padStart(2,"0")+'</span></div><h3>'+esc(s.title)+'</h3><p>'+esc(s.tagline)+'</p><span class="svc-card-more">Learn more &rarr;</span></a>';
         }).join("") + '</div>' +
       '</div></section>' +
 
@@ -1044,15 +1045,35 @@
     }
 
     var svcSliderEl = document.getElementById("svcSlider");
+    if(svcCoverflowResizeHandler){ window.removeEventListener("resize", svcCoverflowResizeHandler); svcCoverflowResizeHandler = null; }
     if(svcSliderEl){
-      var svcCards = svcSliderEl.querySelectorAll(".svc-slide-card");
-      if(!("IntersectionObserver" in window)){
+      var svcCards = Array.prototype.slice.call(svcSliderEl.querySelectorAll(".svc-slide-card"));
+      var reduceMotionSvc = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if(reduceMotionSvc || !svcCards.length){
         svcCards.forEach(function(c){ c.classList.add("in-focus"); });
       } else {
-        var svcIO = new IntersectionObserver(function(entries){
-          entries.forEach(function(en){ en.target.classList.toggle("in-focus", en.intersectionRatio > 0.6); });
-        }, {root: svcSliderEl, threshold: [0, 0.3, 0.6, 0.9, 1]});
-        svcCards.forEach(function(c){ svcIO.observe(c); });
+        var svcTicking = false;
+        function updateSvcCoverflow(){
+          svcTicking = false;
+          var rect = svcSliderEl.getBoundingClientRect();
+          var mid = rect.left + rect.width / 2;
+          svcCards.forEach(function(c){
+            var cr = c.getBoundingClientRect();
+            var cMid = cr.left + cr.width / 2;
+            var dist = (cMid - mid) / (rect.width / 2 + cr.width / 2);
+            dist = Math.max(-1, Math.min(1, dist));
+            c.style.setProperty("--tilt", (dist * -16).toFixed(2) + "deg");
+            c.style.setProperty("--dscale", (1 - Math.abs(dist) * 0.08).toFixed(3));
+            c.style.setProperty("--dop", (1 - Math.abs(dist) * 0.5).toFixed(3));
+            c.style.setProperty("--dgray", (Math.abs(dist) * 0.4).toFixed(3));
+            c.classList.toggle("in-focus", Math.abs(dist) < 0.18);
+          });
+        }
+        function requestSvcUpdate(){ if(!svcTicking){ svcTicking = true; requestAnimationFrame(updateSvcCoverflow); } }
+        svcSliderEl.addEventListener("scroll", requestSvcUpdate, {passive:true});
+        svcCoverflowResizeHandler = requestSvcUpdate;
+        window.addEventListener("resize", svcCoverflowResizeHandler);
+        requestSvcUpdate();
       }
     }
   }
