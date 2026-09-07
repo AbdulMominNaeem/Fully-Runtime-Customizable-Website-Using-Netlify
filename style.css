@@ -335,6 +335,7 @@
   .p-step{min-height:74vh;display:flex;flex-direction:column;justify-content:center;padding:20px 0;}
   .p-step .tag{display:inline-flex;width:fit-content;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--text-muted);border:1px solid var(--border);padding:6px 12px;border-radius:20px;margin-bottom:16px;}
   .p-step h4{font-size:21px;font-weight:700;font-family:var(--body);color:var(--text-muted);}
+  .p-step p{margin-top:12px;max-width:46ch;color:var(--text-muted);font-size:15px;line-height:1.6;}
   .p-step.active .tag{color:var(--accent);border-color:var(--accent);}
   .p-step.active h4{color:var(--text);}
   .chip-field{position:absolute;inset:0;pointer-events:none;z-index:1;}
