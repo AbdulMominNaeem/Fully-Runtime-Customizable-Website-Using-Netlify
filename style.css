@@ -365,7 +365,7 @@
   .slider-btn:disabled{opacity:.32;cursor:default;}
   .slider-btn:disabled:hover{background:var(--surface);border-color:var(--border-strong);color:var(--text);}
   .slider-btn svg{width:16px;height:16px;}
-  .svc-slider{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:28px 4px 14px;margin:0 -4px;perspective:1400px;}
+  .svc-slider{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:28px 4px 14px;margin:0 -4px;perspective:900px;}
   .svc-slider::-webkit-scrollbar{display:none;}
   .svc-slide-card{flex:0 0 clamp(220px,32vw,290px);scroll-snap-align:start;border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:28px 24px;text-decoration:none;display:block;position:relative;overflow:hidden;transition:border-color .2s ease, transform .25s ease-out, opacity .25s ease-out, filter .25s ease-out;opacity:var(--dop,.5);filter:grayscale(var(--dgray,.35));transform:rotateY(var(--tilt,0deg)) scale(var(--dscale,.94));will-change:transform;}
   .svc-slide-card.in-focus{border-color:var(--border-strong);}

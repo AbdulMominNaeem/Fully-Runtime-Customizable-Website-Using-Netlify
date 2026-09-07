@@ -1057,15 +1057,16 @@
           svcTicking = false;
           var rect = svcSliderEl.getBoundingClientRect();
           var mid = rect.left + rect.width / 2;
+          var half = rect.width / 2 || 1;
           svcCards.forEach(function(c){
             var cr = c.getBoundingClientRect();
             var cMid = cr.left + cr.width / 2;
-            var dist = (cMid - mid) / (rect.width / 2 + cr.width / 2);
+            var dist = (cMid - mid) / half;
             dist = Math.max(-1, Math.min(1, dist));
-            c.style.setProperty("--tilt", (dist * -16).toFixed(2) + "deg");
-            c.style.setProperty("--dscale", (1 - Math.abs(dist) * 0.08).toFixed(3));
-            c.style.setProperty("--dop", (1 - Math.abs(dist) * 0.5).toFixed(3));
-            c.style.setProperty("--dgray", (Math.abs(dist) * 0.4).toFixed(3));
+            c.style.setProperty("--tilt", (dist * -30).toFixed(2) + "deg");
+            c.style.setProperty("--dscale", (1 - Math.abs(dist) * 0.16).toFixed(3));
+            c.style.setProperty("--dop", (1 - Math.abs(dist) * 0.65).toFixed(3));
+            c.style.setProperty("--dgray", (Math.abs(dist) * 0.55).toFixed(3));
             c.classList.toggle("in-focus", Math.abs(dist) < 0.18);
           });
         }
@@ -1073,7 +1074,7 @@
         svcSliderEl.addEventListener("scroll", requestSvcUpdate, {passive:true});
         svcCoverflowResizeHandler = requestSvcUpdate;
         window.addEventListener("resize", svcCoverflowResizeHandler);
-        requestSvcUpdate();
+        updateSvcCoverflow();
       }
     }
   }
