@@ -351,7 +351,8 @@
     return [
       {eyebrow:"SEO &middot; AEO &middot; GEO &middot; VIDEO &middot; AI MARKETING", h1:"Visible<br>Everywhere <em>They Look.</em>", lede: DATA.company.heroSub},
       {eyebrow:"RANKINGS &middot; AI CITATIONS &middot; WATCH-TIME", h1:"Ranked. Cited.<br><em>Actually watched.</em>", lede:"Three scoreboards, one system: Google rankings climb, AI Overviews start citing you, and your video gets watched past the hook — tracked together, every week."},
-      {eyebrow:"ONE TEAM &middot; FOUR CHANNELS", h1:"Stop running<br><em>four campaigns.</em>", lede:"Search, AI answers, generative chat, and video used to mean four vendors and four invoices. We run them as one funnel, with one team accountable for all of it."}
+      {eyebrow:"ONE TEAM &middot; FOUR CHANNELS", h1:"Stop running<br><em>four campaigns.</em>", lede:"Search, AI answers, generative chat, and video used to mean four vendors and four invoices. We run them as one funnel, with one team accountable for all of it."},
+      {eyebrow:"WEB &middot; APP &middot; AI SYSTEMS &middot; ENGINEERING", h1:"Get found.<br><em>Then get it right.</em>", lede:"A ranking or a citation only matters if the site or app behind it holds up. We design, build, and ship the product — web, mobile, and the systems connecting them — so the traffic you earn actually converts."}
     ];
   }
 
@@ -383,7 +384,7 @@
                 return '<button type="button" class="hero-dot'+(i===0?' active':'')+'" data-slide="'+i+'" aria-label="Go to slide '+(i+1)+'"></button>';
               }).join("") + '</div>' +
               '<div class="hero-slide-meta">' +
-                '<span class="hero-slide-count" id="heroSlideCount">01 / 04</span>' +
+                '<span class="hero-slide-count" id="heroSlideCount">01 / '+String(slides.length).padStart(2,"0")+'</span>' +
                 '<button type="button" class="hero-text-next" id="heroNext" aria-label="Next slide">Next <span aria-hidden="true">↗</span></button>' +
               '</div>' +
             '</div>' +
@@ -442,7 +443,7 @@
       '</div></section>' +
 
       '<section style="padding-top:0;"><div class="wrap">' +
-        '<div class="section-head reveal"><span class="eyebrow">SELECTED WORK</span><h2>Recent results.</h2><p>A few of the brands currently being found, cited, and watched.</p></div>' +
+        '<div class="section-head reveal"><span class="eyebrow">SELECTED WORK</span><h2>Recent results.</h2><p>A few of the brands we\'ve grown — and the sites and systems we\'ve built for them.</p></div>' +
         '<div class="work-grid reveal">' + featured.map(workCardHtml).join("") + '</div>' +
       '</div></section>' +
 
@@ -461,7 +462,7 @@
 
   function pageServicesIndex(){
     return '<section class="page" data-page="services">' +
-      '<div class="wrap page-hero"><span class="eyebrow reveal">SERVICES</span><h1 class="reveal">'+DATA.services.length+' disciplines. One system.</h1><p class="lede reveal">Most agencies pick one or two channels. We run all of them together, because your audience doesn\'t experience your brand one channel at a time. Pick a service below for the full breakdown.</p></div>' +
+      '<div class="wrap page-hero"><span class="eyebrow reveal">SERVICES</span><h1 class="reveal">'+DATA.services.length+' disciplines. One system.</h1><p class="lede reveal">Most shops pick a lane — marketing or development. We run both together, because your growth depends on people finding you AND on what they find when they get there. Pick a service below for the full breakdown.</p></div>' +
       '<div class="wrap" style="padding-bottom:110px;"><div class="cap-grid reveal">' + (DATA.services.length ? DATA.services.map(function(s){
         return '<a href="#/services/'+esc(s.id)+'" class="cap-card spotlight"><span class="cap-icon">'+iconForService(s)+'</span><h3>'+esc(s.title)+'</h3><p>'+esc(s.tagline)+'</p></a>';
       }).join("") : '<div class="admin-empty">No services added yet.</div>') + '</div></div>' +
@@ -510,7 +511,7 @@
 
   function pageWorkIndex(){
     return '<section class="page" data-page="work">' +
-      '<div class="wrap page-hero"><span class="eyebrow reveal">SELECTED WORK</span><h1 class="reveal">Brands being found, cited, and watched.</h1><p class="lede reveal">A sample of recent engagements across search, AI answers, generative chat, and video. Click any project for the full story.</p></div>' +
+      '<div class="wrap page-hero"><span class="eyebrow reveal">SELECTED WORK</span><h1 class="reveal">Work that ranks, converts, and ships.</h1><p class="lede reveal">A sample of recent engagements across marketing and development — search, AI visibility, video, and the sites and software behind them. Click any project for the full story.</p></div>' +
       '<div class="wrap" style="padding-bottom:110px;"><div class="work-grid two reveal">' +
         (DATA.projects.length ? DATA.projects.map(workCardHtml).join("") : '<div class="admin-empty">No projects added yet.</div>') +
       '</div></div>' +
@@ -565,7 +566,7 @@
 
   function pageTeam(){
     return '<section class="page" data-page="team">' +
-      '<div class="wrap page-hero"><span class="eyebrow reveal">THE TEAM</span><h1 class="reveal">Who\'s behind the reports.</h1><p class="lede reveal">A small team running SEO, AEO, GEO, video, and automation as one system.</p></div>' +
+      '<div class="wrap page-hero"><span class="eyebrow reveal">THE TEAM</span><h1 class="reveal">The people behind the work.</h1><p class="lede reveal">A small team running marketing and development as one system — search, AI visibility, and video, plus the sites and software behind them.</p></div>' +
       '<div class="wrap" style="padding-bottom:110px;"><div class="team-grid">' +
         (DATA.team.length ? DATA.team.map(teamCardHtml).join("") : '<div class="admin-empty">No team members added yet.</div>') +
       '</div></div>' +
@@ -590,7 +591,7 @@
 
   function pageAbout(){
     return '<section class="page" data-page="about">' +
-      '<div class="wrap page-hero"><span class="eyebrow reveal">ABOUT '+esc(DATA.company.name.toUpperCase())+'</span><h1 class="reveal">Discovery stopped being one channel.</h1><p class="lede reveal">People now find brands through a blend of Google, AI Overviews, ChatGPT, Perplexity, and their video feed — often in the same afternoon. Most agencies still specialize in exactly one of those. We built '+esc(DATA.company.name.split(" ")[0])+' around all four, on purpose.</p></div>' +
+      '<div class="wrap page-hero"><span class="eyebrow reveal">ABOUT '+esc(DATA.company.name.toUpperCase())+'</span><h1 class="reveal">Marketing and development, run as one.</h1><p class="lede reveal">People find brands through a blend of Google, AI Overviews, ChatGPT, Perplexity, and their video feed — then judge them by the website or app they land on. Most shops specialize in exactly one side of that. We built '+esc(DATA.company.name.split(" ")[0])+' around both, on purpose.</p></div>' +
       '<div class="wrap" style="padding-bottom:0;"><div class="quote-box reveal"><p>&ldquo;'+esc(DATA.company.quoteAbout)+'&rdquo;</p><footer>&mdash; THE '+esc(DATA.company.name.split(" ")[0].toUpperCase())+' TEAM</footer></div></div>' +
       '<section><div class="wrap">' +
         '<div class="section-head reveal"><span class="eyebrow">WHAT WE VALUE</span><h2>How we work, in practice.</h2></div>' +
@@ -607,7 +608,7 @@
 
   function pageContact(){
     return '<section class="page" data-page="contact">' +
-      '<div class="wrap page-hero" style="padding-bottom:0;"><span class="eyebrow reveal">CONTACT</span><h1 class="reveal">Let\'s map your visibility gaps.</h1><p class="lede reveal">Tell us about your brand and where you think you\'re being missed — Google, AI answers, generative chat, or video. We\'ll reply within '+esc((DATA.company.responseTime||"a few days").toLowerCase())+'.</p></div>' +
+      '<div class="wrap page-hero" style="padding-bottom:0;"><span class="eyebrow reveal">CONTACT</span><h1 class="reveal">Let\'s talk about the work.</h1><p class="lede reveal">Tell us what you\'re trying to build or fix — a marketing system, a website, an app, or all three. We\'ll reply '+esc((DATA.company.responseTime||"within a few days").replace(/^./, function(c){return c.toLowerCase();}))+'.</p></div>' +
       '<div class="wrap"><div class="contact-grid">' +
         '<div class="contact-info reveal">' +
           '<div class="info-row"><span>Email</span><a href="mailto:'+esc(DATA.company.email)+'">'+esc(DATA.company.email)+'</a></div>' +
@@ -875,7 +876,7 @@
         '<div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a></li><li><a href="tel:'+esc((c.phone||"").replace(/[^+\d]/g,""))+'">'+esc(c.phone)+'</a></li><li><a href="#/careers">Careers</a></li></ul></div>' +
       '</div>' +
       '<div class="footer-bottom">' +
-        '<p>&copy; 2026 '+esc(c.name)+'. Placeholder content — swap in your own.</p>' +
+        '<p>&copy; '+new Date().getFullYear()+' '+esc(c.name)+'. All rights reserved.</p>' +
         '<div class="fb-right"><a href="#/admin" class="admin-link">Admin</a>' +
         '<div class="footer-social">' +
           (c.social.linkedin?'<a href="'+esc(c.social.linkedin)+'" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 0 1 4 0v3M12 13v3"/></svg></a>':'') +
@@ -1071,6 +1072,7 @@
       var heroH1El = document.getElementById("heroH1");
       var heroLedeEl = document.getElementById("heroLede");
       var dots = Array.prototype.slice.call(document.querySelectorAll(".hero-dot"));
+      var heroSlideCountEl = document.getElementById("heroSlideCount");
       function showSlide(i){
         slideIdx = (i + slides.length) % slides.length;
         heroSlider.classList.add("is-fading");
@@ -1081,6 +1083,7 @@
           heroLedeEl.textContent = s.lede;
           heroSlider.classList.remove("is-fading");
           dots.forEach(function(d,di){ d.classList.toggle("active", di === slideIdx); });
+          if(heroSlideCountEl) heroSlideCountEl.textContent = String(slideIdx+1).padStart(2,"0") + " / " + String(slides.length).padStart(2,"0");
         }, 180);
       }
       function restartTimer(){
@@ -1647,7 +1650,7 @@
       competitor:{title:'Competitor Gap Analysis',sub:'Compare your website against a competitor and uncover the opportunities worth pursuing.',fields:'<input id="toolWebsite" placeholder="Your website"><input id="competitorUrl" placeholder="Competitor website"><input id="toolKeyword" placeholder="Target market or keyword">',btn:'Compare Businesses',result:'competitorResult'}
     };
     var c=configs[type]||configs.audit;
-    return '<section class="page" data-page="tools"><div class="wrap page-hero tool-page"><a class="back-link" href="#/tools">← All tools</a><span class="eyebrow">LUMEN INTELLIGENCE</span><h1>'+c.title+'</h1><p class="lede">'+c.sub+'</p><div class="tool-panel"><div class="tool-fields">'+c.fields+'</div><button class="btn btn-primary" id="runTool" data-tool="'+type+'">'+c.btn+' →</button><div class="tool-result" id="'+c.result+'"><div class="empty-state">Enter your details to generate your preview report.</div></div><p class="tool-disclaimer">Demo version: results are interactive estimates. Connect real data APIs for production-grade reports.</p></div></div></section>';
+    return '<section class="page" data-page="tools"><div class="wrap page-hero tool-page"><a class="back-link" href="#/tools">← All tools</a><span class="eyebrow">GROWTH TOOLS</span><h1>'+c.title+'</h1><p class="lede">'+c.sub+'</p><div class="tool-panel"><div class="tool-fields">'+c.fields+'</div><button class="btn btn-primary" id="runTool" data-tool="'+type+'">'+c.btn+' →</button><div class="tool-result" id="'+c.result+'"><div class="empty-state">Enter your details to generate your preview report.</div></div><p class="tool-disclaimer">Demo version: results are interactive estimates. Connect real data APIs for production-grade reports.</p></div></div></section>';
   }
   function pageSystems(){
     var items=[['AI CRM','One command center for leads, contacts, deals, tasks and follow-ups.'],['AI Sales Agent','A 24/7 website agent that qualifies, answers and books.'],['Lead Follow-Up','Multi-step email and SMS nurturing that never forgets a lead.'],['Review Automation','Automatically request reviews and route unhappy customers to private recovery.'],['Client Reactivation','Segment old customers and launch win-back campaigns.'],['AI Email Marketing','Generate, personalize, test and automate campaigns.'],['Appointment Booking','Qualification, calendar booking, reminders and no-show recovery.'],['Call Intelligence','Track calls and use AI to surface objections and missed opportunities.'],['Reputation Hub','Monitor reviews and draft responses from one dashboard.'],['Social AI Engine','Plan, create, repurpose and schedule content.']];
@@ -1675,7 +1678,7 @@
   }
   function pageResources(){var posts=[['AI Search Is Changing Discovery','How to prepare content for answer engines and generative search.'],['The Local Visibility Playbook','A practical framework for maps, reviews and local demand.'],['Marketing Automation That Actually Converts','Where automation helps and where human intervention still matters.'],['From Traffic to Revenue','The measurement system behind scalable marketing decisions.']];return '<section class="page" data-page="resources"><div class="wrap page-hero"><span class="eyebrow">RESOURCES</span><h1>Strategies worth <em>keeping.</em></h1><p class="lede">Practical thinking on SEO, AI visibility, automation, local growth and conversion.</p></div><div class="wrap resources-grid">'+posts.map(function(p,i){return '<article class="resource-card"><span>GUIDE 0'+(i+1)+'</span><h3>'+p[0]+'</h3><p>'+p[1]+'</p><a href="#/contact">Get the strategy →</a></article>';}).join('')+'</div></section>';}
   function pageTestimonials(){return '<section class="page" data-page="testimonials"><div class="wrap page-hero"><span class="eyebrow">CLIENT RESULTS</span><h1>Proof before <em>promises.</em></h1><p class="lede">A results-focused agency should make outcomes easy to understand.</p><div class="testimonial-grid"><blockquote>“The strategy connected our SEO and lead generation efforts instead of treating them like separate projects.”<footer>Growth Director · Home Services</footer></blockquote><blockquote>“We finally had visibility into where leads were coming from and what happened after they entered the pipeline.”<footer>Founder · Professional Services</footer></blockquote><blockquote>“The automation work saved our team hours every week while improving follow-up consistency.”<footer>Operations Lead · Local Business</footer></blockquote></div></div></section>';}
-  function pageConfigurator(){var opts=['SEO','Local SEO','AEO / GEO','Paid Ads','AI Visibility','Automation','AI Sales Agent','Review Automation','Content','Social Media'];return '<section class="page" data-page="configurator"><div class="wrap page-hero"><span class="eyebrow">BUILD YOUR SYSTEM</span><h1>What should your growth stack <em>include?</em></h1><p class="lede">Select the capabilities you need and get an interactive recommended system.</p><div class="config-panel"><div class="config-options">'+opts.map(function(x,i){return '<label><input type="checkbox" value="'+x+'" '+(i<3?'checked':'')+'><span>'+x+'</span></label>';}).join('')+'</div><button class="btn btn-primary" id="buildSystem">Build My Growth System →</button><div id="configResult" class="tool-result"></div></div></div></section>';}
+  function pageConfigurator(){var opts=['SEO','Local SEO','AEO / GEO','Paid Ads','AI Visibility','Automation','AI Sales Agent','Review Automation','Content','Social Media','Web Development','App Development'];return '<section class="page" data-page="configurator"><div class="wrap page-hero"><span class="eyebrow">BUILD YOUR SYSTEM</span><h1>What should your growth stack <em>include?</em></h1><p class="lede">Select the capabilities you need and get an interactive recommended system.</p><div class="config-panel"><div class="config-options">'+opts.map(function(x,i){return '<label><input type="checkbox" value="'+x+'" '+(i<3?'checked':'')+'><span>'+x+'</span></label>';}).join('')+'</div><button class="btn btn-primary" id="buildSystem">Build My Growth System →</button><div id="configResult" class="tool-result"></div></div></div></section>';}
 
   var originalAppHtml = appHtml;
   appHtml = function(forceRoute){
